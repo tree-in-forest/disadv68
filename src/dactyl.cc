@@ -50,19 +50,19 @@ int main() {
   // Set all of the widths here. This must be done before calling any of GetTopLeft etc.
 
   d.key_backspace.extra_width_bottom = 11;
-  d.key_backspace.extra_width_left = 3;
+  d.key_backspace.extra_width_left = 2;
   d.key_delete.extra_width_bottom = 11;
-  d.key_end.extra_width_bottom = 3;
-  d.key_ctrl.extra_width_top = 3;
-  d.key_alt.extra_width_top = 3;
-  d.key_alt.extra_width_right = 3;
-  d.key_alt.extra_width_left = 3;
-  d.key_home.extra_width_right = 3;
-  d.key_home.extra_width_left = 3;
-  d.key_home.extra_width_top = 3;
-  d.key_end.extra_width_top = 3;
-  d.key_end.extra_width_right = 3;
-  d.key_end.extra_width_left = 3;
+  d.key_end.extra_width_bottom = 2;
+  d.key_ctrl.extra_width_top = 2;
+  d.key_alt.extra_width_top = 2;
+  d.key_alt.extra_width_right = 2;
+  d.key_alt.extra_width_left = 2;
+  d.key_home.extra_width_right = 2;
+  d.key_home.extra_width_left = 2;
+  d.key_home.extra_width_top = 2;
+  d.key_end.extra_width_top = 2;
+  d.key_end.extra_width_right = 2;
+  d.key_end.extra_width_left = 2;
 
   // left wall
   for (Key* key : d.grid.column(0)) {
@@ -349,12 +349,15 @@ int main() {
 
   // Add all the screw inserts.
   std::vector<Shape> screw_holes;
+  std::vector<Shape> screw_holes_bottom;
   {
-    double screw_height = 5;
-    double screw_radius = 4.4 / 2.0;
-    Shape screw_hole = Cylinder(screw_height + 2, screw_radius, 30);
+    double screw_height = 8;
+    double screw_radius = 3.5 / 2.0;
+    double screw_insert_radius = 4.3 / 2.0;
+    Shape screw_hole = Cylinder(screw_height + 12, screw_insert_radius, 40);
+    Shape screw_hole_bottom = Cylinder(screw_height + 12, screw_radius, 40);
     Shape screw_insert =
-        Cylinder(screw_height, screw_radius + 1.65, 30).TranslateZ(screw_height / 2);
+        Cylinder(screw_height, screw_insert_radius + 3, 30).TranslateZ(screw_height / 2);
 
     glm::vec3 screw_left_bottom = d.key_shift.GetBottomLeft().Apply(kOrigin);
     screw_left_bottom.z = 0;
@@ -391,20 +394,21 @@ int main() {
         screw_hole.Translate(screw_right_bottom),
         screw_hole.Translate(screw_left_bottom),
     };
+    screw_holes_bottom = {
+        screw_hole_bottom.Translate(screw_left_top),
+        screw_hole_bottom.Translate(screw_right_top),
+        screw_hole_bottom.Translate(screw_right_mid),
+        screw_hole_bottom.Translate(screw_right_bottom),
+        screw_hole_bottom.Translate(screw_left_bottom),
+    };
   }
 
   std::vector<Shape> negative_shapes;
   AddShapes(&negative_shapes, screw_holes);
   // Cut off the parts sticking up into the thumb plate.
   negative_shapes.push_back(
-      d.key_backspace.GetTopLeft().Apply(Cube(50, 50, 6).TranslateZ(3)).Color("red"));
+      d.key_backspace.GetTopLeft().Apply(Cube(30, 50, 6).TranslateZ(3).TranslateY(-10).TranslateX(-10).Color("green")));
 
-  // Cut out hole for holder.
-  Shape holder_hole = Cube(29.0, 20.0, 12.5).TranslateZ(12 / 2);
-  glm::vec3 holder_location = d.key_4.GetTopLeft().Apply(kOrigin);
-  holder_location.z = -0.5;
-  holder_location.x += 17.5;
-  negative_shapes.push_back(holder_hole.Translate(holder_location));
 
   Shape result = UnionAll(shapes);
   // Subtracting is expensive to preview and is best to disable while testing.
@@ -421,8 +425,8 @@ int main() {
 
     Shape bottom_plate = UnionAll(bottom_plate_shapes)
                              .Projection()
-                             .LinearExtrude(1.5)
-                             .Subtract(UnionAll(screw_holes));
+                             .LinearExtrude(3)
+                             .Subtract(UnionAll(screw_holes_bottom));
     bottom_plate.WriteToFile("bottom_left.scad");
     bottom_plate.MirrorX().WriteToFile("bottom_right.scad");
   }
