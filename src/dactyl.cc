@@ -341,7 +341,19 @@ int main() {
   }
 
   for (Key* key : d.all_keys()) {
-    shapes.push_back(key->GetSwitch());
+      
+      // Rotate "delete" and "backspace key" key.
+      if (strcmp("key_delete", (key->name).c_str()) == 0 || strcmp("key_backspace", (key->name).c_str()) == 0) {
+        shapes.push_back(key->GetSwitch(true));
+
+        // Raise "ctrl" and "alt" key by 3mm.
+      } else if (strcmp("key_alt", (key->name).c_str()) == 0 || strcmp("key_ctrl", (key->name).c_str()) == 0) {
+        shapes.push_back(key->GetSwitch(false, 3.0));
+      }else{
+        // printf("%s\n", (key->name).c_str());
+        shapes.push_back(key->GetSwitch());
+      }
+      
     if (kAddCaps) {
       shapes.push_back(key->GetCap().Color("red"));
     }
@@ -409,7 +421,7 @@ int main() {
   negative_shapes.push_back(
       d.key_backspace.GetTopLeft().Apply(Cube(30, 50, 6).TranslateZ(3).TranslateY(-10).TranslateX(-10).Color("green")));
 
-
+ 
   Shape result = UnionAll(shapes);
   // Subtracting is expensive to preview and is best to disable while testing.
   result = result.Subtract(UnionAll(negative_shapes));
@@ -431,7 +443,7 @@ int main() {
     bottom_plate.MirrorX().WriteToFile("bottom_right.scad");
   }
 
-  return 0;
+    return 0;
 }
 
 Shape ConnectMainKeys(KeyData& d) {

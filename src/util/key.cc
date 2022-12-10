@@ -54,10 +54,11 @@ Shape RotateCapEdge(Shape s, SaEdgeType edge_type) {
 
 }  // namespace
 
-Shape MakeSwitch(bool add_side_nub) {
+Shape MakeSwitch(bool add_side_nub, bool rotated, double raised) {
   std::vector<Shape> shapes;
-  Shape top_wall = Cube(kSwitchWidth + kWallWidth * 2, kWallWidth, kSwitchThickness)
-                       .Translate(0, kWallWidth / 2 + kSwitchWidth / 2, kSwitchThickness / 2);
+  
+  Shape top_wall = Cube(kSwitchWidth + kWallWidth * 2, kWallWidth, kSwitchThickness + raised)
+                       .Translate(0, kWallWidth / 2 + kSwitchWidth / 2, (kSwitchThickness + raised) / 2);
 
   shapes.push_back(top_wall);
   shapes.push_back(top_wall.RotateZ(90));
@@ -67,10 +68,15 @@ Shape MakeSwitch(bool add_side_nub) {
   if (add_side_nub) {
     Shape side_nub =
         Hull(Cube(kWallWidth, 2.75, kSwitchThickness)
-                 .Translate(kWallWidth / 2 + kSwitchWidth / 2, 0, kSwitchThickness / 2),
-             Cylinder(2.75, 1, 30).RotateX(90).Translate(kSwitchWidth / 2, 0, 1));
-    shapes.push_back(side_nub);
-    shapes.push_back(side_nub.RotateZ(180));
+                 .Translate(kWallWidth / 2 + kSwitchWidth / 2, 0, kSwitchThickness / 2 + raised),
+             Cylinder(2.75, 1, 30).RotateX(90).Translate(kSwitchWidth / 2, 0, 1 + raised));
+    if (!rotated) { 
+      shapes.push_back(side_nub);
+      shapes.push_back(side_nub.RotateZ(180));
+    } else {
+      shapes.push_back(side_nub.RotateZ(90));
+      shapes.push_back(side_nub.RotateZ(270));
+    }
   }
 
   return UnionAll(shapes).TranslateZ(kSwitchThickness * -1);
@@ -180,16 +186,16 @@ Shape Key::GetInverseCap(double custom_vertical_length) const {
   return transforms.Apply(Cube(width, height, 30).TranslateZ(15));
 }
 
-Shape Key::GetSwitch() const {
+Shape Key::GetSwitch(bool rotated, double rised) const {
   std::vector<Shape> shapes;
   if (extra_z > 0) {
-    Shape s = Union(MakeSwitch(false), MakeSwitch(add_side_nub).TranslateZ(extra_z));
+    Shape s = Union(MakeSwitch(false, rotated, rised), MakeSwitch(add_side_nub, rotated, rised).TranslateZ(extra_z));
     if (extra_z > 4) {
-      s += MakeSwitch(false).TranslateZ(4);
+      s += MakeSwitch(false, rotated, rised).TranslateZ(4);
     }
     shapes.push_back(GetSwitchTransforms().Apply(s));
   } else {
-    shapes.push_back(GetSwitchTransforms().Apply(MakeSwitch(add_side_nub)));
+    shapes.push_back(GetSwitchTransforms().Apply(MakeSwitch(add_side_nub, rotated, rised)));
   }
   if (extra_width_top > 0) {
     shapes.push_back(Hull(GetTopRight().Apply(GetPostConnector()),

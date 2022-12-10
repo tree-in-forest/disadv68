@@ -96,7 +96,7 @@ struct Key {
   TransformList GetTransforms() const;
   TransformList GetSwitchTransforms() const;
 
-  Shape GetSwitch() const;
+  Shape GetSwitch(bool rotated = false, double rised = 0.0) const;
   Shape GetInverseSwitch() const;
   // Used to subtract and clear space in the key cap's path. Vertical length can be explicitly
   // passed to support cutting out for long keys like enter on the kinesis.
@@ -223,6 +223,6 @@ Shape MakeDsaCap();
 Shape MakeSaCap();
 Shape MakeSaEdgeCap(SaEdgeType edge_type = SaEdgeType::BOTTOM);
 Shape MakeSaTallEdgeCap(SaEdgeType edge_type = SaEdgeType::BOTTOM);
-Shape MakeSwitch(bool add_side_nub = true);
+Shape MakeSwitch(bool add_side_nub = true, bool rotated = false, double rised = 0.0);
 
 }  // namespace scad
