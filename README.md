@@ -1,8 +1,9 @@
-# Disadvantage 68 keyboard
+# Disadv68 keyboard
 
 This keyboard is a fork of [dactyl-cc](https://github.com/adereth/dactyl-keyboard).
 
-![kb_left](pictures/kb_left.jpg)
+The prototype:
+![kb_left](pictures/split.jpg)
 
 Differences with *dactyl-cc* and some notes:
 
@@ -10,8 +11,8 @@ Differences with *dactyl-cc* and some notes:
 - Fixed screw hole sizes for M3 screws and "threaded brass insert" ([AliExpress](https://www.aliexpress.com/item/1005004870993068.htm)).
     ![nut](pictures/screw_insert.png)
 
-- Original Kinesis (advantage series) keycaps are from ABS and very expensive (50EUR + shipping).
-  *Solution* (use OEM and DSA keycaps). Due to different naming conventions for numbering rows, we will define them as:
+- Original [Kinesis Contoured](https://deskthority.net/wiki/Kinesis_Contoured) keycaps are from ABS and are very expensive (50EUR + shipping).
+  *Solution* (use OEM and DSA keycaps). Due to different naming conventions for numbering rows, we will define them as
     ![1u](pictures/1u_keycaps.png)
 
   Here is a list of which keycaps you will need (ABS for < 10EUR, PBT < 20EUR):
@@ -26,14 +27,16 @@ Differences with *dactyl-cc* and some notes:
   
   ![keycaps](pictures/keycaps-layout.png)
 
-  The `1u` OEM `R5` keycaps are very rare, so we opted for `R4` keycaps instead. To compensate the keycap height difference, we raised the switch sockets/holes by 3mm.
-  The `1x1.25u` OEM `R2` are also very rare so we opted out for `1u` keycaps.
+  The `1u` OEM `R5` keycaps are very rare, so we opted for `R4` keycaps instead. To compensate keycap height difference, we raised the switch sockets/holes by 3mm.
+  The `1x1.25u` OEM `R2`s are also very rare so we opted out for `1u` keycaps.
   Note that Cherry stems are not "fully symmetric", therefore if you want to rotate the keycap by 90°, you also need to rotate the switch:
 
   ![stem](pictures/cherry_stem.png)
   
-  Sometimes `Numpad Enter` keycaps have rotated stem (therefore, on the standard keyboard the key switch will be placed sideways). Consult with your keycaps vendor if this is the case (it was in ours). This is important because switch sockets have side nubs.
-  Current version of the keyboard hull has both sockets with `Numpad Enter` and `Numpad 0` keycaps rotated.
+  Sometimes `Numpad Enter` keycaps have rotated stems (therefore, on the standard keyboard the key switch will be placed sideways). Consult with your keycaps vendor if this is the case (it was in ours). This is important because switch sockets have side nubs.
+  The current version of the keyboard hull has both sockets with `Numpad Enter` and `Numpad 0` keycaps rotated.
+
+  The other option is to 3D print keycaps. We were unsuccessful in FDM printing — it is hard to get the keycap stems right. Probably the best option is to use [stereolithography](https://en.wikipedia.org/wiki/Stereolithography). If you want to generate the 3D models we suggest you look at the [Parametric Mechanical Keycap Library](https://github.com/rsheldiii/KeyV2).
 
 ## FDM printing settings
 
@@ -50,7 +53,7 @@ Differences with *dactyl-cc* and some notes:
 - First layer: 0.3mm
 - Raft: yes
 
-Due to long print — 50 hours for each side and small nozzle size, it is very likely that your extruder will get clogged.
+Due to the long printing time — 50 hours for each side and the small nozzle size, it is very likely that the extruder will get clogged.
 
 ## Building STL files
 
@@ -64,19 +67,107 @@ Due to long print — 50 hours for each side and small nozzle size, it is very l
     ./build.sh
     ```
 
-3. Install [OpenSCAD](https://openscad.org/downloads.html) (*Development Snapshot* is the best choice). Files `.scad` will be generated in folder `build`.
+3. Install [OpenSCAD](https://openscad.org/downloads.html) (*Development Snapshot* is the best choice). Files `.scad` will be generated in the folder `build`.
 
 4. Generate STL files.
 
-    ```bash
-    cd build
-    // openscad -o ../things/left.stl left.scad
-    make_things.sh
-    ```
+For measuring distances on STL files we recommend [Blender](https://www.blender.org/).
+For post-processing and quick edits, we recommend [Thinkercad](https://www.tinkercad.com).
 
-## Controllers, communication between splits, and firmware
+## Assembly and firmware
 
-Coming soon.
+Our choice for the microcontroller is `WeAct BlackPill STM32F411CEU6`:
+
+- [QMK docs on blacpill](https://docs.qmk.fm/#/platformdev_blackpill_f4x1?id=weact-blackpill-stm32f4x1)
+- [WeAct Studio's blackpill repository](https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1)
+
+In the folder `things` you can find some custom STL's:
+
+- Custom bottom plate with recesses for USB cable and 12-wire ribbon cable, and modified holes for M3 flat/countersunk head screws.
+
+  ![screw_hole](pictures/cuntersunk.png)
+
+- A case for blackpill microcontroller.
+  
+  ![box](pictures/blacbox.png)
+
+Note. With low RPM you can easily drill into ASA material.
+
+### What do you need
+
+- 2m of an old hard UTP cable (0 EUR)
+- an old floppy drive ribbon cable (or any other ribbon cable, 0EUR)
+- 10 pcs of 6mm M3 flat/countersunk/Philips head screws (0.5EUR)
+- 10 pcs threaded brass insert (1EUR from Aliexpress)
+- keycaps (<10EUR for ABS, <20EUR for PBT on Aliexress — contact the store)
+- 68 pcs cherry-like key switches. We have bought 110 Gateron Pro Yellow V2 2.0 for 18EUR (good build quality, linear, pre-lubed).
+- WeAct BlackPill STM32F411CEU6 ([where to buy](https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1#legitimate-purchase-links-as-well-as-pirated-links) 7EUR)
+- 24-pin female header for the microcontroller
+- 100 1N4148 diodes (0.75EUR)
+- Soldering iron with adjustable temperature (borrow, otherwise We recommend [PINEICL](https://pine64.com/product/pinecil-smart-mini-portable-soldering-iron/) or a cheap one on Aliexpress)
+- Solder
+- Tweezers with a tiny head
+- Wirecutter
+- Razor knife
+- Scissors pliers for wire stripping (that support small wires)
+- USB-C cable
+- Multimeter
+- Hot glue gun
+- Around 25 hours of spare time
+- ...
+
+### Assembly
+
+1. Clean up/remove support from the printed hull.
+   ![hull1](pictures/assembly/hull_bottom.jpg)
+   ![hull2](pictures/assembly/hull_top.jpg)
+
+2. Add switches and keycaps
+   ![left](pictures/kb_left.jpg)
+
+3. Stabilize switches with hot glue.
+
+4. Place wires for the columns (if you start with rows first, it is harder to replace diodes/switches later).
+
+     - Extract/unwind wires from the UTP cable
+     - Make a hook.
+        ![hook](pictures/assembly/hook.jpg)
+     - Hook up the wire to the top row pin and mark the position for the rest of the pins.
+       ![marks](pictures/assembly/mark_wire.jpg)
+     - Using the scissors pliers for wire stripping cut the insulator for each mark twice. Then use a Razor knife to partially peel off the insulator.
+     ![cuts](pictures/assembly/cuts.jpg)
+     - Remove the rest of the insulator using tweezers.
+     ![remove](pictures/assembly/remove_insu.jpg)
+     - Apply flux and solder the column wires to the switch pins.
+     ![cols](pictures/assembly/cols.jpg)
+
+5. Make rows from diodes (start with making "eyes") — double-check the orientation of diodes.
+     ![eye](pictures/assembly/diode_eye.jpg)
+     ![all_diodes](pictures/assembly/all_diodes.jpg)
+
+6. Connect wires to the female header for the microcontroller.
+  ![mcu_wires](pictures/assembly/mcu_wires.jpg)
+
+7. Test the left side of the keyboard (flash the microcontroller first).
+8. TODO
+
+### Firmware
+
+...can be found [here — qmk_firmware](https://github.com/tree-in-forest/qmk_firmware/tree/tree-in-forest-disadv68/keyboards/handwired/disadv68).
+
+### Layout
+
+The default layout is:
+
+![default_layout](pictures/disadv68_default_layout.png)
+
+- To access F-keys use the Layer key.
+- Reset the keyboard: `Layer + RAlt`
+- Jump to the bootloader ``Layer + ` ``
+
+Nice layouts to check out:
+
+- [The Hands Down™ Layout](https://sites.google.com/alanreiser.com/handsdown)
 
 ## Traveling case
 
