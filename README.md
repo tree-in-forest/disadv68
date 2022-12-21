@@ -81,7 +81,7 @@ Our choice for the microcontroller is `WeAct BlackPill STM32F411CEU6`:
 - [QMK docs on blacpill](https://docs.qmk.fm/#/platformdev_blackpill_f4x1?id=weact-blackpill-stm32f4x1)
 - [WeAct Studio's blackpill repository](https://github.com/WeActStudio/WeActStudio.MiniSTM32F4x1)
 
-In the folder `things` you can find some custom STL's:
+In the folder `things` you can find some custom STLs:
 
 - Custom bottom plate with recesses for USB cable and 12-wire ribbon cable, and modified holes for M3 flat/countersunk head screws.
 
@@ -153,7 +153,7 @@ Note. With low RPM you can easily drill into ASA material.
 
 ### Firmware
 
-...can be found [here — qmk_firmware](https://github.com/tree-in-forest/qmk_firmware/tree/tree-in-forest-disadv68/keyboards/handwired/disadv68).
+...can be found [here — qmk_firmware](https://github.com/tree-in-forest/qmk_firmware/tree/disadv68/keyboards/handwired/disadv68).
 
 ### Layout
 
