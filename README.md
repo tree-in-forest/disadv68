@@ -149,7 +149,17 @@ Note. With low RPM you can easily drill into ASA material.
   ![mcu_wires](pictures/assembly/mcu_wires.jpg)
 
 7. Test the left side of the keyboard (flash the microcontroller first).
-8. TODO
+8. Make the right side.
+9. Insert screw inserts slowly using soldering iron at 200°C.
+  ![screw_inserts](pictures/assembly/screw_insert.jpg)
+10. Connect the left and the right side with a 12-wire ribbon (6 columns and 6 rows) cable according to your firmware settings.
+11. Connect [USB wires](https://en.wikipedia.org/wiki/USB_hardware) to the female header for the microcontroller (`D-` → `A11`, `D+` → `A12`, `+5V` → `5V`, and `GND` → `G`). This will reduce the footprint of the microcontroller inside the keyboard hull.
+12. Secure the wires with hot glue.
+13. Make the bottom plates. Our 3D printer had problems. So we used 4mm plywood with longer (8mm) M3 screws. Here is the design for the wooden bottom plate — [bottom_left](things/custom_bottom_plate/bottom_left.svg) and [bottom_right](things/custom_bottom_plate/bottom_right.svg). These designs do not take into account the ASA shrinkages. You need to do modifications on your own.
+14. Use M3 screws to secure the bottom plates
+15. Add pads to the bottom plates (you can make them from an old mousepad).
+16. Walla, you should have a functional keyboard now.
+   ![v1](pictures/split_v1.jpg)
 
 ### Firmware
 
@@ -174,5 +184,9 @@ Nice layouts to check out:
 Coming soon.
 
 ## Wrist rests
+
+Coming soon.
+
+## Adjustable tilting supports
 
 Coming soon.
